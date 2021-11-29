@@ -24,18 +24,36 @@ const fetchTabsData = () => {
   });
 };
 
+const data = fetchTabsData().then(menus => {
+  $tabs.style.setProperty('--tabs-length', menus.length);
+  const tabs = menus
+    .map((menu, index) => {
+      return `
+      <div class="tab" data-index=${index}>${menu.title}</div>
+    `;
+    })
+    .join('');
+  const tabContent = menus
+    .map((menu, index) => {
+      return `<div class="tab-content ${index === 0 ? 'active' : ''}">${menu.content}</div>`;
+    })
+    .join('');
+  $tabs.innerHTML = `<nav>
+    ${tabs}
+    <span class="glider"></span>
+  </nav>
+  ${tabContent}
+  `;
+});
+
+console.log($tabs);
+
+$tabs.onclick = e => {
+  if (!e.target.classList.contains('tab')) return;
+  console.dir(e.target.parentNode);
+};
+
 // fetchTabsData(); //.then(menus => {
-//   const tabs = menus
-//     .map((menu, index) => {
-//       return `
-//       <div class="tab" data-index=${index}>${menu.title}</div>
-//     `;
-//     })
-//     .join('');
-//   console.log(tabs);
-//   $tabs.innerHTML = `<nav>
-//     ${tabs}
-//     <span class="glider"></span>
-//   </nav>`;
+
 //   console.log($tabs.innerHTML);
 // });
