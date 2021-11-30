@@ -46,14 +46,14 @@ const data = fetchTabsData().then(menus => {
   `;
 });
 
-console.log($tabs);
-
 $tabs.onclick = e => {
   if (!e.target.classList.contains('tab')) return;
-  console.dir(e.target.parentNode);
+  const contents = [...$tabs.children].filter(node => node.classList.contains('tab-content'));
+  const dataIndex = e.target.getAttribute('data-index');
+
+  contents.forEach((content, index) => {
+    content.classList.toggle('active', index === +dataIndex);
+  });
+  e.target.parentNode.lastElementChild.style.left =
+    getComputedStyle($tabs).getPropertyValue('--tab-width') * dataIndex + 'px';
 };
-
-// fetchTabsData(); //.then(menus => {
-
-//   console.log($tabs.innerHTML);
-// });
