@@ -57,5 +57,9 @@ $form.oninput = ({ target }) => {
   const $successIcons = document.querySelectorAll('.icon-success');
   const countSuccessIcons = [...$successIcons].filter($successIcon => $successIcon.classList.contains('hidden')).length;
 
+  /**
+   * TODO: $submitBtn 리팩토링
+   */
+
   countSuccessIcons === 0 ? ($submitBtn.disabled = false) : ($submitBtn.disabled = true);
 };
