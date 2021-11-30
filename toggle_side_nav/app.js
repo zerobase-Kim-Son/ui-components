@@ -1,4 +1,5 @@
 const $navBar = document.querySelector('.nav-bar');
+const $main = document.querySelector('main');
 const $toggleBtn = document.querySelector('.toggle');
 
 const getCookie = cookieName => {
@@ -17,9 +18,14 @@ const setCookie = (name, value) => {
   document.cookie = `${name}=${value}`;
 };
 
-if (getCookie('isActive') === 'true') $navBar.classList.add('active');
+if (getCookie('isActive') === 'true') {
+  $navBar.classList.add('active');
+  $navBar.classList.add('notransition');
+  $main.classList.add('notransition');
+  $toggleBtn.classList.add('notransition');
+}
 
-$toggleBtn.onclick = e => {
+$toggleBtn.onclick = () => {
   $navBar.classList.toggle('active');
 };
 
