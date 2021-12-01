@@ -19,9 +19,11 @@ const render = () => {
 };
 
 $toggleButton.onclick = () => {
+
   document.body.classList.toggle('dark');
 
   document.body.classList.contains('dark') ? setTheme('dark') : setTheme('light');
 };
+
 
 render();
