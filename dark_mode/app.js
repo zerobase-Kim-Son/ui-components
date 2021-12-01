@@ -14,12 +14,11 @@ const render = () => {
   document.body.classList.add('dark');
 };
 
-// render();
-
 $toggleButton.onclick = e => {
   document.body.classList.toggle('dark');
 
   document.body.classList.contains('dark') ? setTheme('dark') : setTheme('light');
 };
 
-window.addEventListener('DOMContentLoaded', render);
+// TODO: FOIT 현상
+document.addEventListener('DOMContentLoaded', render);
