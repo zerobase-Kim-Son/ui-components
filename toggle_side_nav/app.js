@@ -11,7 +11,7 @@ const getCookie = cookieName => {
       const [name] = cookie.split('=');
       return name === cookieName;
     })[0]
-    .split('=')[1];
+    ?.split('=')[1];
 };
 
 const setCookie = (name, value) => {
