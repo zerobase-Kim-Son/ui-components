@@ -1,24 +1,23 @@
 const $increaseBtn = document.querySelector('.increase');
 const $decreaseBtn = document.querySelector('.decrease');
-
 const $counter = document.querySelector('.counter');
 
 const counter = (() => {
-  let num = 0;
+  let count = 0;
   return {
     increase() {
-      return ++num;
+      return ++count;
     },
     decrease() {
-      return num > 0 ? --num : 0;
+      return count > 0 ? --count : 0;
     },
   };
 })();
 
-$increaseBtn.onclick = e => {
+$increaseBtn.onclick = () => {
   $counter.textContent = counter.increase();
 };
 
-$decreaseBtn.onclick = e => {
+$decreaseBtn.onclick = () => {
   $counter.textContent = counter.decrease();
 };
