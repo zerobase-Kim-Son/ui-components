@@ -1,4 +1,5 @@
 const $tabs = document.querySelector('.tabs');
+const $spinner = document.querySelector('.spinner');
 
 // eslint-disable-next-line arrow-body-style
 const fetchTabsData = () => {
@@ -25,6 +26,7 @@ const fetchTabsData = () => {
 };
 
 const data = fetchTabsData().then(menus => {
+  $spinner.style.display = 'none';
   $tabs.style.setProperty('--tabs-length', menus.length);
   const tabs = menus
     .map((menu, index) => {
