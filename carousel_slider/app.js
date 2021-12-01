@@ -9,9 +9,17 @@
 //       <button class="carousel-control prev">&laquo;</button>
 //       <button class="carousel-control next">&raquo;</button> -->
 const carousel = ($container, images) => {
+  // TODO: image 값 → 동적 생성, 이미지의 갯수도 가변적이다 → 이미지 배열을 받아서
+  // TODO: 0번과 3번 → cloneNode
+  /*
+        const img = new Image();
+          img.src = $carouselSlides.lastElementChild.getAttribute('src');
+          image.width | image.height → padding의 넓이도 고려(scrollWidth)
+          이미지 원본의 크기를 구한다
+  */
   $container.innerHTML = `
     <div class="carousel-slides">
-        <img src="${images[3]}">
+        <img src="${images[3]}"> 
         <img src="${images[0]}">
         <img src="${images[1]}">
         <img src="${images[2]}">
@@ -23,7 +31,7 @@ const carousel = ($container, images) => {
   `;
 
   /**
-   * TODO: duration 설정, clearInterval 설정
+   * TODO: duration 설정 → 우측으로 이미지가 이동, clearInterval 설정
    */
 
   const slides = document.querySelector('.carousel-slides');

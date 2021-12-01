@@ -1,87 +1,90 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet" />
-    <title>Carousel Slider</title>
-    <style>
-      *,
-      *::after,
-      *::before {
-        box-sizing: border-box;
-      }
 
-      body {
-        font-family: 'Open Sans';
-        font-weight: 300;
-        color: #58666e;
-        background-color: #f0f3f4;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet" />
+  <title>Carousel Slider</title>
+  <style>
+    *,
+    *::after,
+    *::before {
+      box-sizing: border-box;
+    }
 
-      .title {
-        color: #db5b33;
-        font-weight: 300;
-        text-align: center;
-      }
+    body {
+      font-family: 'Open Sans';
+      font-weight: 300;
+      color: #58666e;
+      background-color: #f0f3f4;
+    }
 
-      /* 캐러셀의 window 역할을 한다. */
-      .carousel {
-        width: 350px;
-        height: 200px;
-        position: relative;
-        margin: 0 auto;
-        overflow: hidden;
-        /* carousel 요소의 width 셋팅이 완료될 때까지 감춘다. */
-        opacity: 1;
-      }
+    .title {
+      color: #db5b33;
+      font-weight: 300;
+      text-align: center;
+    }
 
-      .carousel-slides {
-        --currentSlide: 0;
-        --duration: 0;
-        /* 수평 정렬 */
-        display: flex;
-        transition: transform calc(var(--duration) * 1ms) ease-out;
-        transform: translate3D(calc(var(--currentSlide) * -100%), 0, 0);
-      }
+    /* 캐러셀의 window 역할을 한다. */
+    /* TODO: 이미지 width와 height를 가져오는 방법 */
+    .carousel {
+      width: 350px;
+      height: 200px;
+      position: relative;
+      margin: 0 auto;
+      overflow: hidden;
+      /* carousel 요소의 width 셋팅이 완료될 때까지 감춘다. */
+      opacity: 1;
+    }
 
-      .carousel-slides img {
-        padding: 5px;
-      }
+    .carousel-slides {
+      --currentSlide: 0;
+      --duration: 0;
+      /* 수평 정렬 */
+      display: flex;
+      transition: transform calc(var(--duration) * 1ms) ease-out;
+      transform: translate3D(calc(var(--currentSlide) * -100%), 0, 0);
+    }
 
-      /* carousel의 prev, next 버튼 */
-      .carousel-control {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 2em;
-        color: #fff;
-        background-color: transparent;
-        border-color: transparent;
-        cursor: pointer;
-        z-index: 99;
-      }
+    .carousel-slides img {
+      padding: 5px;
+    }
 
-      .carousel-control:focus {
-        outline: none;
-      }
+    /* carousel의 prev, next 버튼 */
+    .carousel-control {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2em;
+      color: #fff;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      z-index: 99;
+    }
 
-      /* carousel의 prev 버튼 */
-      .carousel-control.prev {
-        left: 0;
-      }
+    .carousel-control:focus {
+      outline: none;
+    }
 
-      /* carousel의 next 버튼 */
-      .carousel-control.next {
-        right: 0;
-      }
-    </style>
-  </head>
+    /* carousel의 prev 버튼 */
+    .carousel-control.prev {
+      left: 0;
+    }
 
-  <body>
-    <h1 class="title">Carousel Slider</h1>
-    <div class="carousel"></div>
-    <script defer src="app.js"></script>
-  </body>
+    /* carousel의 next 버튼 */
+    .carousel-control.next {
+      right: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="title">Carousel Slider</h1>
+  <div class="carousel"></div>
+  <script defer src="app.js"></script>
+</body>
+
 </html>

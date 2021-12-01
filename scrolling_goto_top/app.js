@@ -1,8 +1,7 @@
+// View
 const $scrollIcon = document.querySelector('.scroll-icon');
 
-// 100 이상인 경우 block
-// console.log(window.scroll(0, 100));
-
+// use lodash better
 const throttle = (callback, delay) => {
   let timerId;
   return event => {
@@ -19,23 +18,16 @@ const throttle = (callback, delay) => {
 };
 
 const displayIcon = () => {
-  console.log(pageYOffset);
   if (pageYOffset < 100) $scrollIcon.style.display = 'none';
   else $scrollIcon.style.display = 'block';
 };
 
-const scrollToTop = () => {
-  const height = document.documentElement.scrollTop || document.body.scrollTop;
-  // console.log(height);
-  if (height > 0) {
-    window.requestAnimationFrame(scrollToTop);
-    window.scrollTo(0, height - height / 10);
-  }
-};
+// Controller
+window.addEventListener('scroll', throttle(displayIcon, 500));
 
-window.addEventListener('scroll', throttle(displayIcon, 100));
-
-$scrollIcon.onclick = e => {
-  e.preventDefault();
-  scrollToTop();
-};
+$scrollIcon.onclick = () =>
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth',
+  });
