@@ -21,19 +21,17 @@ const checkValid = (exp, $target) => {
   toggleIcon($successIcon, !isValid);
 };
 
-const checkUserid = $target => {
+export const checkUserid = $target => {
   const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
   checkValid(regExp, $target);
 };
 
-const checkUserName = $target => {
+export const checkUserName = $target => {
   const regExp = /^[0-9a-zA-Z]{1,}$/;
   checkValid(regExp, $target);
 };
 
-const checkPassword = $target => {
+export const checkPassword = $target => {
   const regExp = /^[0-9a-zA-Z]{6,12}$/;
   checkValid(regExp, $target);
 };
-
-export default { checkUserid, checkUserName, checkPassword };

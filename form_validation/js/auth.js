@@ -1,13 +1,21 @@
-import { checkUserid, checkUserName, checkPassword } from './checkValidation';
-const $forms = document.querySelectorAll('.form');
+import { checkUserid, checkUserName, checkPassword } from './checkValidation.js';
+import toaster from './toaster.js';
 
+const $forms = document.querySelectorAll('.form');
 const [$signin, $signup] = [...$forms];
 
-// TODO: POST 요청
-$signin.onsubmit = e => {
+const createToastAction = (type, title, message) => ({ type, title, message });
+
+// TODO: submit 이벤트 처리, POST 요청
+$signin.addEventListener('submit', e => {
   e.preventDefault();
-  console.log(e);
-};
+  toaster.add(createToastAction('success', 'Well done!', 'Signin Successfully'));
+});
+
+$signup.addEventListener('submit', e => {
+  e.preventDefault();
+  toaster.add(createToastAction('success', 'Well done!', 'Signup Successfully'));
+});
 
 $signin.oninput = ({ target }) => {
   const $submitBtn = $signin.querySelector('.button');
