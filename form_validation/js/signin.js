@@ -1,6 +1,4 @@
 const $form = document.querySelector('.form');
-const $userid = document.querySelector('#signin-userid');
-const $password = document.querySelector('#signin-password');
 const $submitBtn = document.querySelector('.signin.button');
 
 // const debounce = (callback, delay) => {
@@ -13,11 +11,10 @@ const $submitBtn = document.querySelector('.signin.button');
 //   };
 // };
 
-const getIconsAndMessage = target => {
-  return [...target.parentNode.children].filter(
-    $element => $element.classList.contains('icon') | $element.classList.contains('error')
+const getIconsAndMessage = target =>
+  [...target.parentNode.children].filter(
+    $element => $element.classList.contains('icon') || $element.classList.contains('error')
   );
-};
 
 const toggleIcon = ($icon, isValid) => {
   $icon.classList.toggle('hidden', isValid);
