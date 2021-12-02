@@ -7,6 +7,8 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('darkmode', window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   document.body.classList.toggle('dark', JSON.parse(localStorage.getItem('darkmode')));
+
+  document.body.style.visibility = 'visible';
 });
 
 $toggleButton.onclick = () => {
