@@ -6,50 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Stopwatch</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet" />
-    <script defer src="app.js"></script>
-    <style>
-      body {
-        font-family: 'Source Code Pro', monospace;
-      }
-      .title {
-        color: #db5b33;
-        font-weight: 300;
-        text-align: center;
-      }
-      .stopwatch {
-        text-align: center;
-        font-size: 3em;
-        padding: 30px;
-      }
-      .control {
-        width: 120px;
-        padding: 5px;
-        margin: 15px;
-        font-size: 36px;
-        font-weight: bold;
-        border: 2px solid #f44336;
-        border-radius: 4px;
-        cursor: pointer;
-        outline: none;
-      }
-      .control:hover:enabled {
-        background: #f44336;
-        color: aliceblue;
-      }
-      .control:disabled {
-        color: gray;
-        cursor: not-allowed;
-      }
-      .laps {
-        display: grid;
-        grid-template-columns: 70px 1fr;
-        column-gap: 50px;
-        row-gap: 10px;
-        width: 260px;
-        margin: 10px auto;
-        font-size: 0.5em;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1 class="title">Stopwatch</h1>
@@ -59,5 +16,6 @@
       <button class="control" disabled>Reset</button>
       <div class="laps"></div>
     </div>
+    <script defer src="app.js"></script>
   </body>
 </html>
