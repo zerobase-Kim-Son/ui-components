@@ -4,123 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendar</title>
-    <!-- 원하는 폰트와 아이콘을 사용해도 좋다. -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet" />
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
-    <style>
-      *,
-      *::after,
-      *::before {
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Open Sans';
-        font-weight: 300;
-        text-align: center;
-      }
-      .title {
-        color: #db5b33;
-        font-weight: 300;
-        text-align: center;
-      }
-      /* 뷰를 구현하세요. */
-      .date-picker {
-        padding: 5px;
-        font-size: 16px;
-      }
-
-      .calendar {
-        --calendar-size: 400px;
-        width: var(--calendar-size);
-        margin: 0 auto;
-        font-size: calc(var(--calendar-size) * 0.04);
-        border-radius: 10px;
-        box-shadow: 5px 3px 15px 10px rgba(0, 0, 0, 0.2);
-        display: none;
-      }
-
-      .calendar-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #3bba6d;
-        color: #fff;
-        border-radius: 10px 10px 0 0;
-      }
-
-      .month {
-        font-size: calc(var(--calendar-size) * 0.06);
-      }
-
-      .left,
-      .right {
-        cursor: pointer;
-        padding: calc(var(--calendar-size) * 0.08);
-      }
-
-      .calendar-monthly {
-        text-align: center;
-      }
-
-      .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        grid-auto-rows: calc(var(--calendar-size) / 7);
-        grid-gap: 2px;
-        padding: 5px;
-        border-radius: 0 0 10px 10px;
-      }
-
-      .calendar-grid div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .calendar-grid .date {
-        cursor: pointer;
-      }
-
-      .calendar-grid .date.today {
-        border: 1px solid #3bba6d;
-        border-radius: 50%;
-      }
-
-      .calendar-grid .date.red {
-        color: red;
-      }
-
-      .calendar-grid .date.blue {
-        color: blue;
-      }
-
-      .calendar-grid .date.gray {
-        color: #b4b4b4;
-      }
-
-      .calendar-grid .date:hover,
-      .calendar-grid .date.active {
-        background-color: #3bba6d;
-        border-radius: 50%;
-        color: #fff;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1 class="title">Date Picker</h1>
     <input type="text" class="date-picker" placeholder="Select Date" readonly />
     <div class="calendar">
       <div class="calendar-nav">
-        <div class="left">
-          <i class="bx bxs-left-arrow"></i>
-        </div>
+        <i class="left bx bxs-left-arrow"></i>
         <div class="calendar-monthly">
           <div class="month"></div>
           <div class="year"></div>
         </div>
-        <div class="right">
-          <i class="bx bxs-right-arrow"></i>
-        </div>
+        <i class="right bx bxs-right-arrow"></i>
       </div>
       <div class="calendar-grid"></div>
     </div>

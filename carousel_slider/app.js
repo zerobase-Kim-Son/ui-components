@@ -10,63 +10,53 @@ const carousel = ($container, images) => {
 
   // container innerHTML
   $container.innerHTML = `
-  <div class="carousel-slides"> 
-    <img src="${images[3]}">
-    <img src="${images[0]}">
-    <img src="${images[1]}">
-    <img src="${images[2]}">
-    <img src="${images[3]}">
-    <img src="${images[0]}">
-  </div>
-  <button class="carousel-control prev">&laquo;</button>
-  <button class="carousel-control next">&raquo;</button>
-  `;
+    <div class="carousel-slides">
+      <img src="${images[images.length - 1]}">
+      ${images.map(image => `<img src="${image}">`).join('')}
+      <img src="${images[0]}">
+    </div>
+    <button class="carousel-control prev">&laquo;</button>
+    <button class="carousel-control next">&raquo;</button>`;
 
   // slide
   const duration = 300;
 
   const $slides = document.querySelector('.carousel-slides');
-  const prev = document.querySelector('.prev');
-  const next = document.querySelector('.next');
 
   $slides.style.setProperty('--duration', duration);
 
-  let idx = 1;
+  let idx = getComputedStyle($slides).getPropertyValue('--currentSlide');
   const slideNext = () => {
     $slides.style.setProperty('--currentSlide', ++idx);
-    if (idx === 5) {
+    if (idx === images.length + 1) {
       setTimeout(() => {
-        $slides.classList.add('noanimation');
+        $slides.classList.add('notransition');
         $slides.style.setProperty('--currentSlide', 1);
       }, duration);
       idx = 1;
     }
-    $slides.classList.remove('noanimation');
+    $slides.classList.remove('notransition');
   };
 
   const slidePrev = () => {
     $slides.style.setProperty('--currentSlide', --idx);
     if (idx === 0) {
       setTimeout(() => {
-        $slides.classList.add('noanimation');
-        $slides.style.setProperty('--currentSlide', 4);
+        $slides.classList.add('notransition');
+        $slides.style.setProperty('--currentSlide', images.length);
       }, duration);
-      idx = 4;
+      idx = images.length;
     }
-    $slides.classList.remove('noanimation');
+    $slides.classList.remove('notransition');
   };
 
   let slideInterval = setInterval(slideNext, duration * 10);
 
-  prev.onclick = e => {
-    clearInterval(slideInterval);
-    slidePrev();
-    slideInterval = setInterval(slideNext, duration * 10);
-  };
+  $container.onclick = ({ target }) => {
+    if (!target.classList.contains('carousel-control')) return;
 
-  next.onclick = e => {
     clearInterval(slideInterval);
-    slideNext();
+    target.classList.contains('prev') ? slidePrev() : slideNext();
     slideInterval = setInterval(slideNext, duration * 10);
   };
 };
