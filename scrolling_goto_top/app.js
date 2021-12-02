@@ -16,11 +16,12 @@ const throttle = (callback, delay) => {
   };
 };
 
-const displayIcon = () => {
-  if (window.pageYOffset < 100) $scrollIcon.style.display = 'none';
-  else $scrollIcon.style.display = 'block';
-};
-
-window.addEventListener('scroll', throttle(displayIcon, 500));
+window.addEventListener(
+  'scroll',
+  throttle(() => {
+    window.pageYOffset < 100 ? ($scrollIcon.style.display = 'none') : ($scrollIcon.style.display = 'block');
+  }),
+  500
+);
 
 $scrollIcon.onclick = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
