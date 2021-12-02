@@ -11,70 +11,82 @@ const $datePicker = document.querySelector('.date-picker');
 
 const today = new Date();
 
-const MONTH = [
-  'January',
-  'Febuary',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
 const format = (monthIndex, year) =>
   monthIndex < 0
     ? { monthIndex: 11, year: year - 1 }
     : monthIndex > 11
     ? { monthIndex: 0, year: +year + 1 }
-    : { monthIndex, year };
+    : { monthIndex, year: +year };
 
-const render = (monthIndex, year, pickDay) => {
+const render = (monthIndex, year, pickDate) => {
+  console.log(pickDate);
+
+  const MONTH = [
+    'January',
+    'Febuary',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
   const [$month, $year] = [...$calendarMonthly.children];
 
   // nav
   const formatted = format(monthIndex, year);
 
   $month.dataset.index = formatted.monthIndex;
-
   $month.textContent = MONTH[$month.dataset.index];
+
   $year.textContent = formatted.year;
 
   // grid
   const getFirstDayOfMonth = (year, month) => new Date(year, month).getDay();
-  const getLastDateOfMonth = (year, month) => new Date(year, month + 1, 0).getDate();
-  const getLastDateOfPrevMonth = (year, month) => new Date(year, month, 0).getDate();
 
-  const date = [];
-  let week = [];
-  let day = getFirstDayOfMonth(year, monthIndex);
-  for (let i = 1; i <= getLastDateOfMonth(year, monthIndex); i++) {
-    if (day > 6) {
-      day %= 7;
-      date.push(week);
-      week = [];
+  const getCurrentMonthDates = () => {
+    const getLastDateOfMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+
+    const date = [];
+
+    let day = getFirstDayOfMonth(year, monthIndex);
+    for (let i = 1; i <= getLastDateOfMonth(year, monthIndex); i++) {
+      date.push({ date: i, day });
+      day = ++day > 6 ? (day %= 7) : day;
     }
-    week[day] = i;
-    day++;
-  }
-  date.push(week);
 
-  let prevDate = getLastDateOfPrevMonth(year, monthIndex);
-  const prevMonthDates = [];
-  const firstWeek = date[0].filter(x => x);
-  for (let i = 7 - firstWeek.length - 1; i >= 0; i--) {
-    prevMonthDates.push(prevDate--);
-  }
+    return date;
+  };
 
-  const nextMonthDates = [];
-  const lastWeek = [...date[date.length - 1]];
-  for (let i = 0; i < 7 - lastWeek.length; i++) {
-    nextMonthDates.push(i + 1);
-  }
+  const getPrevMonthDates = () => {
+    const getLastDateOfPrevMonth = (year, month) => new Date(year, month, 0).getDate();
+
+    const date = [];
+
+    let prevDate = getLastDateOfPrevMonth(year, monthIndex);
+    for (let i = 0; i < getFirstDayOfMonth(year, monthIndex); i++) {
+      date.push(prevDate--);
+    }
+
+    return date.reverse();
+  };
+
+  const getNextMonthDates = () => {
+    const getLastDayOfMonth = (year, month) => new Date(year, month + 1, 0).getDay();
+
+    const date = [];
+
+    for (let i = 1; i < 7 - getLastDayOfMonth(year, monthIndex); i++) {
+      date.push(i);
+    }
+
+    return date;
+  };
 
   $calendarGrid.innerHTML = '';
 
@@ -84,38 +96,41 @@ const render = (monthIndex, year, pickDay) => {
     $calendarGrid.appendChild(div);
   });
 
-  prevMonthDates.forEach(date => {
+  getPrevMonthDates().forEach(date => {
+    const month = format(formatted.monthIndex - 1, formatted.year);
+
+    $calendarGrid.innerHTML += `
+      <div class="date gray" data-date="${month.year}-${month.monthIndex}">${date}</div>
+    `;
+  });
+
+  getCurrentMonthDates().forEach(info => {
     const div = document.createElement('div');
-    div.textContent = date;
+
+    div.textContent = info.date;
     div.classList.add('date');
-    div.classList.add('gray');
-    const prevMonth = format(formatted.monthIndex - 1, formatted.year);
-    div.dataset.date = `${prevMonth.year}-${prevMonth.monthIndex}`;
+    div.dataset.date = `${formatted.year}-${formatted.monthIndex}`;
+
+    if (info.day === 0) div.classList.add('red');
+    if (info.day === 6) div.classList.add('blue');
+
+    if (info.date === +pickDate) div.classList.add('active');
+    if (
+      info.date === today.getDate() &&
+      formatted.monthIndex === today.getMonth() &&
+      formatted.year === today.getFullYear()
+    )
+      div.classList.add('today');
+
     $calendarGrid.appendChild(div);
   });
 
-  date.forEach(week => {
-    week.forEach((day, idx) => {
-      const div = document.createElement('div');
-      div.textContent = day;
-      if (day === +pickDay) div.classList.add('active');
-      if (day === today.getDate() && monthIndex === today.getMonth()) div.classList.add('today');
-      div.classList.add('date');
-      if (idx === 0) div.classList.add('red');
-      if (idx === 6) div.classList.add('blue');
-      div.dataset.date = `${formatted.year}-${formatted.monthIndex}`;
-      $calendarGrid.appendChild(div);
-    });
-  });
+  getNextMonthDates().forEach(date => {
+    const month = format(formatted.monthIndex + 1, formatted.year);
 
-  nextMonthDates.forEach(date => {
-    const div = document.createElement('div');
-    div.textContent = date;
-    div.classList.add('date');
-    div.classList.add('gray');
-    const nextMonth = format(formatted.monthIndex + 1, formatted.year);
-    div.dataset.date = `${nextMonth.year}-${nextMonth.monthIndex}`;
-    $calendarGrid.appendChild(div);
+    $calendarGrid.innerHTML += `
+      <div class="date gray" data-date="${month.year}-${month.monthIndex}">${date}</div>
+    `;
   });
 
   $calendar.style.display = 'block';
@@ -124,9 +139,11 @@ const render = (monthIndex, year, pickDay) => {
 $calendarNav.onclick = ({ target }) => {
   const [$month, $year] = [...$calendarMonthly.children];
 
-  if (target.matches('.left') || target.matches('.left *')) render(--$month.dataset.index, $year.textContent);
+  const [, , day] = $datePicker.value.split('-');
 
-  if (target.matches('.right') || target.matches('.right *')) render(++$month.dataset.index, $year.textContent);
+  if (target.matches('.left') || target.matches('.left *')) render(--$month.dataset.index, $year.textContent, day);
+
+  if (target.matches('.right') || target.matches('.right *')) render(++$month.dataset.index, $year.textContent, day);
 };
 
 $calendarGrid.onclick = ({ target }) => {
@@ -136,6 +153,8 @@ $calendarGrid.onclick = ({ target }) => {
   const formatLength = number => (number < 10 ? '0' + number : number);
 
   $datePicker.value = `${year}-${formatLength(+month + 1)}-${formatLength(target.textContent)}`;
+
+  console.log(`${year}-${formatLength(+month + 1)}-${formatLength(target.textContent)}`);
 
   $calendar.style.display = 'none';
 };
