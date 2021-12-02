@@ -13,7 +13,7 @@ const render = () => {
 render();
 
 $accordion.onclick = ({ target }) => {
-  if (!(target.matches('.menu') || !target.matches('.menu *'))) return;
+  if (!target.matches('.menu')) return;
 
   [...$accordion.children].forEach($menuContainer => {
     $menuContainer.classList.toggle('active', target.parentNode === $menuContainer);
