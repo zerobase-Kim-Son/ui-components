@@ -28,25 +28,18 @@ const fetchTabsData = () => {
 fetchTabsData().then(menus => {
   $spinner.style.display = 'none';
 
-  const tabs = menus
-    .map(
-      (menu, index) => `
-    <div class="tab" data-index=${index}>${menu.title}</div>
-    `
-    )
-    .join('');
-
+  const tabs = menus.map((menu, index) => `<div class="tab" data-index=${index}>${menu.title}</div>`).join('');
   const tabContent = menus
     .map((menu, index) => `<div class="tab-content ${index === 0 ? 'active' : ''}">${menu.content}</div>`)
     .join('');
 
   $tabs.style.setProperty('--tabs-length', menus.length);
-  $tabs.innerHTML = `<nav>
-    ${tabs}
-    <span class="glider"></span>
-  </nav>
-  ${tabContent}
-  `;
+  $tabs.innerHTML = `
+    <nav>
+      ${tabs}
+      <span class="glider"></span>
+    </nav>
+    ${tabContent}`;
 });
 
 $tabs.onclick = ({ target }) => {
