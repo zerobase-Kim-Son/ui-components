@@ -1,29 +1,18 @@
 const $toggleButton = document.querySelector('.toggle-button');
 
-const getTheme = () => localStorage.getItem('theme');
+window.addEventListener('DOMContentLoaded', () => {
+  [...$toggleButton.children].forEach($element => $element.classList.add('notransition'));
 
-const setTheme = theme => localStorage.setItem('theme', theme);
+  if (localStorage.getItem('darkmode') === null)
+    localStorage.setItem('darkmode', window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-const initialTheme = () => {
-  if (getTheme()) return;
-
-  window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');
-};
-
-const render = () => {
-  initialTheme();
-
-  if (getTheme() !== 'dark') return;
-
-  document.body.classList.add('dark');
-};
+  document.body.classList.toggle('dark', JSON.parse(localStorage.getItem('darkmode')));
+});
 
 $toggleButton.onclick = () => {
+  [...$toggleButton.children].forEach($element => $element.classList.remove('notransition'));
 
   document.body.classList.toggle('dark');
 
-  document.body.classList.contains('dark') ? setTheme('dark') : setTheme('light');
+  localStorage.setItem('darkmode', document.body.classList.contains('dark'));
 };
-
-
-render();

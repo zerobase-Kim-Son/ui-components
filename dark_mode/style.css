@@ -61,7 +61,6 @@ article {
 }
 
 /* Dark Theme */
-
 body.dark {
   background-color: #232323;
 }
@@ -76,4 +75,8 @@ body.dark .toggle-button > .toggle-button-text {
 
 body.dark article {
   color: #fff;
+}
+
+.notransition {
+  transition: none !important;
 }
