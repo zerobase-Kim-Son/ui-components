@@ -1,0 +1,50 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans';
+  font-weight: 300;
+}
+
+.title {
+  color: #db5b33;
+  font-weight: 300;
+  text-align: center;
+}
+
+/* 팝업을 위한 CSS */
+.popup-container {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+
+.popup {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-width: 520px;
+  min-height: 200px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.popup-close {
+  position: absolute;
+  right: 20px;
+  border: none;
+  outline: none;
+  background-color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+}

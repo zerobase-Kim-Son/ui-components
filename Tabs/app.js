@@ -25,21 +25,22 @@ const fetchTabsData = () => {
   });
 };
 
-const data = fetchTabsData().then(menus => {
+fetchTabsData().then(menus => {
   $spinner.style.display = 'none';
-  $tabs.style.setProperty('--tabs-length', menus.length);
+
   const tabs = menus
-    .map((menu, index) => {
-      return `
-      <div class="tab" data-index=${index}>${menu.title}</div>
-    `;
-    })
+    .map(
+      (menu, index) => `
+    <div class="tab" data-index=${index}>${menu.title}</div>
+    `
+    )
     .join('');
+
   const tabContent = menus
-    .map((menu, index) => {
-      return `<div class="tab-content ${index === 0 ? 'active' : ''}">${menu.content}</div>`;
-    })
+    .map((menu, index) => `<div class="tab-content ${index === 0 ? 'active' : ''}">${menu.content}</div>`)
     .join('');
+
+  $tabs.style.setProperty('--tabs-length', menus.length);
   $tabs.innerHTML = `<nav>
     ${tabs}
     <span class="glider"></span>
@@ -48,14 +49,17 @@ const data = fetchTabsData().then(menus => {
   `;
 });
 
-$tabs.onclick = e => {
-  if (!e.target.classList.contains('tab')) return;
+$tabs.onclick = ({ target }) => {
+  if (!target.classList.contains('tab')) return;
+
   const contents = [...$tabs.children].filter(node => node.classList.contains('tab-content'));
-  const dataIndex = e.target.getAttribute('data-index');
+
+  const dataIndex = target.getAttribute('data-index');
 
   contents.forEach((content, index) => {
     content.classList.toggle('active', index === +dataIndex);
   });
-  e.target.parentNode.lastElementChild.style.left =
+
+  target.parentNode.lastElementChild.style.left =
     getComputedStyle($tabs).getPropertyValue('--tab-width') * dataIndex + 'px';
 };
