@@ -1,22 +1,25 @@
 const $accordion = document.querySelector('.accordion');
 
-[...$accordion.children].forEach($menuContainer => {
-  $menuContainer.children[1].style.height = $menuContainer.classList.contains('active')
-    ? `${$menuContainer.children[1].scrollHeight}px`
-    : '0';
-  if ($menuContainer.classList.contains('active')) $menuContainer.children[1].classList.add('notransition');
-});
-
-$accordion.onclick = e => {
-  if (!(e.target.matches('.menu') || !e.target.matches('.menu *'))) return;
-
+const render = () => {
   [...$accordion.children].forEach($menuContainer => {
-    $menuContainer.classList.toggle('active', e.target.parentNode === $menuContainer);
+    const $submenu = $menuContainer.children[1];
+
+    $submenu.style.height = $menuContainer.classList.contains('active') ? `${$submenu.scrollHeight}px` : '0';
+
+    if ($menuContainer.classList.contains('active')) $submenu.classList.add('notransition');
   });
+};
+
+render();
+
+$accordion.onclick = ({ target }) => {
+  if (!(target.matches('.menu') || !target.matches('.menu *'))) return;
 
   [...$accordion.children].forEach($menuContainer => {
+    $menuContainer.classList.toggle('active', target.parentNode === $menuContainer);
+
     $menuContainer.children[1].style.height =
-      e.target.parentNode === $menuContainer ? `${e.target.nextElementSibling.scrollHeight}px` : '0';
+      target.parentNode === $menuContainer ? `${target.nextElementSibling.scrollHeight}px` : '0';
   });
 };
 
