@@ -45,8 +45,7 @@ body {
   font-size: calc(var(--calendar-size) * 0.06);
 }
 
-.left,
-.right {
+.bx {
   cursor: pointer;
   padding: calc(var(--calendar-size) * 0.08);
 }

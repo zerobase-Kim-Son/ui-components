@@ -11,16 +11,36 @@ const $datePicker = document.querySelector('.date-picker');
 
 const today = new Date();
 
-const format = (monthIndex, year) =>
-  monthIndex < 0
-    ? { monthIndex: 11, year: year - 1 }
-    : monthIndex > 11
-    ? { monthIndex: 0, year: +year + 1 }
-    : { monthIndex, year: +year };
+const format = (month, year) =>
+  month < 0 ? { month: 11, year: year - 1 } : month > 11 ? { month: 0, year: +year + 1 } : { month, year: +year };
 
-const render = (monthIndex, year, pickDate) => {
-  console.log(pickDate);
+const getCalendarDates = (year, month) => {
+  const currentMonthDates = (() => {
+    const getLastDateOfMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
+    return Array.from({ length: getLastDateOfMonth(year, month) }, (_, idx) => idx + 1);
+  })();
+
+  const prevMonthDates = (() => {
+    const getLastDateOfPrevMonth = (year, month) => new Date(year, month, 0).getDate();
+    const getFirstDayOfMonth = (year, month) => new Date(year, month).getDay();
+
+    return Array.from(
+      { length: getFirstDayOfMonth(year, month) },
+      (_, idx) => getLastDateOfPrevMonth(year, month) - idx
+    ).reverse();
+  })();
+
+  const nextMonthDates = (() => {
+    const getLastDayOfMonth = (year, month) => new Date(year, month + 1, 0).getDay();
+
+    return Array.from({ length: 6 - getLastDayOfMonth(year, month) }, (_, idx) => idx + 1);
+  })();
+
+  return [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
+};
+
+const render = (year, month, pickDate) => {
   const MONTH = [
     'January',
     'Febuary',
@@ -39,111 +59,38 @@ const render = (monthIndex, year, pickDate) => {
   const [$month, $year] = [...$calendarMonthly.children];
 
   // nav
-  const formatted = format(monthIndex, year);
+  const formatted = format(month, year);
 
-  $month.dataset.index = formatted.monthIndex;
-  $month.textContent = MONTH[$month.dataset.index];
+  $month.dataset.month = formatted.month;
+  $month.textContent = MONTH[$month.dataset.month];
 
   $year.textContent = formatted.year;
 
   // grid
-  const getFirstDayOfMonth = (year, month) => new Date(year, month).getDay();
+  $calendarGrid.innerHTML = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => `<div>${day}</div>`).join('');
 
-  const getCurrentMonthDates = () => {
-    const getLastDateOfMonth = (year, month) => new Date(year, month + 1, 0).getDate();
-
-    const date = [];
-
-    let day = getFirstDayOfMonth(year, monthIndex);
-    for (let i = 1; i <= getLastDateOfMonth(year, monthIndex); i++) {
-      date.push({ date: i, day });
-      day = ++day > 6 ? (day %= 7) : day;
+  let isCurrentMonth = false;
+  getCalendarDates(year, month).forEach(date => {
+    isCurrentMonth = date === 1 ? !isCurrentMonth : isCurrentMonth;
+    if (isCurrentMonth) {
+      $calendarGrid.innerHTML += `<div class="date">${date}</div>`;
+    } else {
+      $calendarGrid.innerHTML += `<div class="date gray">${date}</div>`;
     }
-
-    return date;
-  };
-
-  const getPrevMonthDates = () => {
-    const getLastDateOfPrevMonth = (year, month) => new Date(year, month, 0).getDate();
-
-    const date = [];
-
-    let prevDate = getLastDateOfPrevMonth(year, monthIndex);
-    for (let i = 0; i < getFirstDayOfMonth(year, monthIndex); i++) {
-      date.push(prevDate--);
-    }
-
-    return date.reverse();
-  };
-
-  const getNextMonthDates = () => {
-    const getLastDayOfMonth = (year, month) => new Date(year, month + 1, 0).getDay();
-
-    const date = [];
-
-    for (let i = 1; i < 7 - getLastDayOfMonth(year, monthIndex); i++) {
-      date.push(i);
-    }
-
-    return date;
-  };
-
-  $calendarGrid.innerHTML = '';
-
-  ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].forEach(day => {
-    const div = document.createElement('div');
-    div.textContent = day;
-    $calendarGrid.appendChild(div);
-  });
-
-  getPrevMonthDates().forEach(date => {
-    const month = format(formatted.monthIndex - 1, formatted.year);
-
-    $calendarGrid.innerHTML += `
-      <div class="date gray" data-date="${month.year}-${month.monthIndex}">${date}</div>
-    `;
-  });
-
-  getCurrentMonthDates().forEach(info => {
-    const div = document.createElement('div');
-
-    div.textContent = info.date;
-    div.classList.add('date');
-    div.dataset.date = `${formatted.year}-${formatted.monthIndex}`;
-
-    if (info.day === 0) div.classList.add('red');
-    if (info.day === 6) div.classList.add('blue');
-
-    if (info.date === +pickDate) div.classList.add('active');
-    if (
-      info.date === today.getDate() &&
-      formatted.monthIndex === today.getMonth() &&
-      formatted.year === today.getFullYear()
-    )
-      div.classList.add('today');
-
-    $calendarGrid.appendChild(div);
-  });
-
-  getNextMonthDates().forEach(date => {
-    const month = format(formatted.monthIndex + 1, formatted.year);
-
-    $calendarGrid.innerHTML += `
-      <div class="date gray" data-date="${month.year}-${month.monthIndex}">${date}</div>
-    `;
   });
 
   $calendar.style.display = 'block';
 };
 
 $calendarNav.onclick = ({ target }) => {
+  if (!target.matches('.bx')) return;
+
   const [$month, $year] = [...$calendarMonthly.children];
 
-  const [, , day] = $datePicker.value.split('-');
+  let { month } = $month.dataset;
+  target.classList.contains('left') ? month-- : month++;
 
-  if (target.matches('.left') || target.matches('.left *')) render(--$month.dataset.index, $year.textContent, day);
-
-  if (target.matches('.right') || target.matches('.right *')) render(++$month.dataset.index, $year.textContent, day);
+  render($year.textContent, month);
 };
 
 $calendarGrid.onclick = ({ target }) => {
@@ -160,7 +107,7 @@ $calendarGrid.onclick = ({ target }) => {
 };
 
 $datePicker.onclick = ({ target }) => {
-  if (!target.value) render(today.getMonth(), today.getFullYear());
+  if (!target.value) render(today.getFullYear(), today.getMonth());
   else {
     const [year, month, day] = target.value.split('-');
     render(month - 1, year, day);
