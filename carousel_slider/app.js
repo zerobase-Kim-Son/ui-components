@@ -1,14 +1,15 @@
 const carousel = ($container, images) => {
-  // get img size
-  const img = new Image();
-  img.src = `${images[0]}`;
+  (() => {
+    // Get Image Size
+    const image = new Image();
+    image.src = `${images[0]}`;
+    // Use Image Size to Set Container Size
+    image.onload = () => {
+      $container.style.width = `${image.width + 10}px`;
+    };
+  })();
 
-  // use img size set container size
-  $container.style.width = img.width + 10 + 'px';
-  $container.style.height = img.height + 10 + 'px';
-  $container.style.opacity = 1;
-
-  // container innerHTML
+  // Create Image Slide
   $container.innerHTML = `
     <div class="carousel-slides">
       <img src="${images[images.length - 1]}">
@@ -18,45 +19,52 @@ const carousel = ($container, images) => {
     <button class="carousel-control prev">&laquo;</button>
     <button class="carousel-control next">&raquo;</button>`;
 
-  // slide
-  const duration = 500;
+  $container.style.opacity = 1;
+
+  // Set Movement
+  const transitionTime = 500;
 
   const $slides = document.querySelector('.carousel-slides');
 
-  $slides.style.setProperty('--duration', duration);
+  $slides.style.setProperty('--duration', transitionTime);
 
   let transitionState = false;
 
-  let idx = getComputedStyle($slides).getPropertyValue('--currentSlide');
-  const slideNext = () => {
-    $slides.style.setProperty('--currentSlide', ++idx);
-    if (idx === images.length + 1) {
-      setTimeout(() => {
-        $slides.classList.add('notransition');
-        $slides.style.setProperty('--currentSlide', 1);
-        transitionState = false;
-      }, duration);
-      idx = 1;
-    }
-    $slides.classList.remove('notransition');
+  const prev = imageIndex => imageIndex - 1;
+
+  const next = imageIndex => imageIndex + 1;
+
+  const checkIndex = imageIndex => {
+    if (imageIndex > 0 && imageIndex <= images.length) return imageIndex;
+
+    const format = imageIndex => (imageIndex === 0 ? images.length : 1);
+
+    setTimeout(() => {
+      transitionState = false;
+      $slides.classList.add('notransition');
+      $slides.style.setProperty('--currentSlide', format(imageIndex));
+    }, transitionTime);
+
+    return format(imageIndex);
   };
 
-  const slidePrev = () => {
-    $slides.style.setProperty('--currentSlide', --idx);
-    if (idx === 0) {
-      setTimeout(() => {
-        $slides.classList.add('notransition');
-        $slides.style.setProperty('--currentSlide', images.length);
-        transitionState = false;
-      }, duration);
-      idx = images.length;
-    }
-    $slides.classList.remove('notransition');
-  };
+  const slide = (() => {
+    let imageIndex = 1;
+    return direction => {
+      imageIndex = direction(imageIndex);
 
-  let slideInterval = setInterval(slideNext, duration * 10);
+      $slides.classList.remove('notransition');
+      $slides.style.setProperty('--currentSlide', imageIndex);
 
-  $slides.ontransitionstart = () => {
+      imageIndex = checkIndex(imageIndex);
+    };
+  })();
+
+  let slideInterval = setInterval(() => {
+    slide(next);
+  }, transitionTime * 10);
+
+  $slides.ontransitionrun = () => {
     transitionState = true;
   };
 
@@ -66,12 +74,15 @@ const carousel = ($container, images) => {
 
   $container.onclick = ({ target }) => {
     if (!target.classList.contains('carousel-control')) return;
+    if (!transitionState === false) return;
 
     clearInterval(slideInterval);
-    if (transitionState === false) {
-      target.classList.contains('prev') ? slidePrev() : slideNext();
-      slideInterval = setInterval(slideNext, duration * 10);
-    }
+
+    target.classList.contains('prev') ? slide(prev) : slide(next);
+
+    slideInterval = setInterval(() => {
+      slide(next);
+    }, transitionTime * 10);
   };
 };
 
