@@ -17,7 +17,7 @@ body {
 }
 
 /* 팝업을 위한 CSS */
-.popup-container {
+.popup {
   position: fixed;
   top: 0;
   width: 100%;
@@ -26,7 +26,7 @@ body {
   display: none;
 }
 
-.popup {
+.popup-container {
   position: absolute;
   top: 20%;
   left: 0;
