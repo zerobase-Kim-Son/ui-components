@@ -19,11 +19,13 @@ const carousel = ($container, images) => {
     <button class="carousel-control next">&raquo;</button>`;
 
   // slide
-  const duration = 300;
+  const duration = 500;
 
   const $slides = document.querySelector('.carousel-slides');
 
   $slides.style.setProperty('--duration', duration);
+
+  let transitionState = false;
 
   let idx = getComputedStyle($slides).getPropertyValue('--currentSlide');
   const slideNext = () => {
@@ -32,6 +34,7 @@ const carousel = ($container, images) => {
       setTimeout(() => {
         $slides.classList.add('notransition');
         $slides.style.setProperty('--currentSlide', 1);
+        transitionState = false;
       }, duration);
       idx = 1;
     }
@@ -44,6 +47,7 @@ const carousel = ($container, images) => {
       setTimeout(() => {
         $slides.classList.add('notransition');
         $slides.style.setProperty('--currentSlide', images.length);
+        transitionState = false;
       }, duration);
       idx = images.length;
     }
@@ -52,12 +56,22 @@ const carousel = ($container, images) => {
 
   let slideInterval = setInterval(slideNext, duration * 10);
 
+  $slides.ontransitionstart = () => {
+    transitionState = true;
+  };
+
+  $slides.ontransitionend = () => {
+    transitionState = false;
+  };
+
   $container.onclick = ({ target }) => {
     if (!target.classList.contains('carousel-control')) return;
 
     clearInterval(slideInterval);
-    target.classList.contains('prev') ? slidePrev() : slideNext();
-    slideInterval = setInterval(slideNext, duration * 10);
+    if (transitionState === false) {
+      target.classList.contains('prev') ? slidePrev() : slideNext();
+      slideInterval = setInterval(slideNext, duration * 10);
+    }
   };
 };
 
