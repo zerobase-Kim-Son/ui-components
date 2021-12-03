@@ -1,13 +1,14 @@
-import { renderIcon } from './renderIcon.js';
-import { hideForm } from './hideForm.js';
+import renderIcon from './renderIcon.js';
+import hideForm from './hideForm.js';
 import { toaster, createToastAction } from './toaster.js';
 
 const $forms = document.querySelectorAll('.form');
 
-// TODO: POST 요청
 [...$forms].forEach($form => {
   $form.addEventListener('submit', e => {
     e.preventDefault();
+
+    console.log(Object.fromEntries([...new FormData($form)]));
 
     $form.classList.contains('signin')
       ? toaster.add(createToastAction('success', 'Well done!', 'Signin Successfully'))

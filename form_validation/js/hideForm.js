@@ -1,4 +1,4 @@
-export const hideForm = (target, $form) => {
+const hideForm = (target, $form) => {
   if (!target.matches('.link > a')) return;
   if ($form.classList.contains('signin')) {
     $form.classList.add('hidden');
@@ -8,3 +8,5 @@ export const hideForm = (target, $form) => {
     $form.previousElementSibling.classList.remove('hidden');
   }
 };
+
+export default hideForm;
