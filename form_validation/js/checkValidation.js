@@ -7,9 +7,9 @@ const toggleIcon = ($icon, isValid) => {
   $icon.classList.toggle('hidden', isValid);
 };
 
-const checkValid = (exp, $target) => {
+const checkValid = (regex, $target) => {
   const [$successIcon, $errorIcon, $errorMessage] = getIconsAndMessage($target);
-  const isValid = exp.test($target.value);
+  const isValid = regex.test($target.value);
 
   toggleIcon($errorIcon, isValid);
   if ($target.name === 'userid') $errorMessage.textContent = !isValid ? '이메일 형식에 맞게 입력해 주세요.' : '';
