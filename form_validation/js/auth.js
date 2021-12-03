@@ -1,8 +1,9 @@
-import renderIcon from './renderIcon.js';
-import hideForm from './hideForm.js';
 import { toaster, createToastAction } from './toaster.js';
+import renderIcon from './renderIcon.js';
+import changeForm from './changeForm.js';
 
 const $forms = document.querySelectorAll('.form');
+const $links = document.querySelectorAll('.link > a');
 
 [...$forms].forEach($form => {
   $form.addEventListener('submit', e => {
@@ -21,6 +22,6 @@ const $forms = document.querySelectorAll('.form');
   });
 
   $form.addEventListener('click', ({ target }) => {
-    hideForm(target, $form);
+    changeForm(target, $forms);
   });
 });
