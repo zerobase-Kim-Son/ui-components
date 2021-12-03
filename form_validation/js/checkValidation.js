@@ -1,5 +1,3 @@
-// TODO: check함수 내부의 중복 요소들 함수화 => 유효한 필드값인지 확인하는 함수
-
 const getIconsAndMessage = target =>
   [...target.parentNode.children].filter(
     $element => $element.classList.contains('icon') || $element.classList.contains('error')

@@ -1,16 +1,6 @@
 const $form = document.querySelector('.form');
 const $submitBtn = document.querySelector('.signin.button');
 
-// const debounce = (callback, delay) => {
-//   let timer;
-//   return e => {
-//     if (timer) {
-//       clearTimeout(timer);
-//     }
-//     timer = setTimeout(callback, delay, e);
-//   };
-// };
-
 const getIconsAndMessage = target =>
   [...target.parentNode.children].filter(
     $element => $element.classList.contains('icon') || $element.classList.contains('error')
@@ -28,11 +18,6 @@ const checkUserid = $target => {
   toggleIcon($errorIcon, isValid);
   $errorMessage.textContent = !isValid ? '이메일 형식에 맞게 입력해 주세요.' : '';
   toggleIcon($successIcon, !isValid);
-
-  // icons.forEach(icon => {
-  //   console.log(icon);
-  //   icon.classList.toggle('hidden', regExp.test(e.$target.value));
-  // });
 };
 
 const checkPassword = $target => {
@@ -45,18 +30,11 @@ const checkPassword = $target => {
   toggleIcon($successIcon, !isValid);
 };
 
-// $userid.addEventListener('input', checkUserid);
-// $password.addEventListener('input', checkPassword);
-
 $form.oninput = ({ target }) => {
   if (target.id === 'signin-userid') checkUserid(target);
   if (target.id === 'signin-password') checkPassword(target);
   const $successIcons = document.querySelectorAll('.icon-success');
   const countSuccessIcons = [...$successIcons].filter($successIcon => $successIcon.classList.contains('hidden')).length;
-
-  /**
-   * TODO: $submitBtn 리팩토링
-   */
 
   countSuccessIcons === 0 ? ($submitBtn.disabled = false) : ($submitBtn.disabled = true);
 };
