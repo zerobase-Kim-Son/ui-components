@@ -2,43 +2,51 @@ const $display = document.querySelector('.display');
 const $firstControlBtn = document.querySelector('.control');
 const $laps = document.querySelector('.laps');
 
-let time = { mm: 0, ss: 0, ms: 0 };
 let timer;
 
-const format = time => (time < 10 ? `0${time}` : `${time}`);
+const stopwatch = (() => {
+  const getRandomNum = () => Math.floor(Math.random() * 9 + 1);
 
-const getRandomNum = () => Math.floor(Math.random() * 9 + 1);
+  const randomNum = getRandomNum();
+  let time = { mm: 0, ss: 0, ms: 0 };
 
-const timeDisplay = randomNum => {
-  const ms = randomNum ? format(time.ms).slice(0, 1) + randomNum : format(time.ms);
-  $display.textContent = `${format(time.mm)}:${format(time.ss)}:${ms}`;
-};
+  const format = time => (time < 10 ? `0${time}` : `${time}`);
 
-let randomNum = getRandomNum();
+  const timeDisplay = randomNum => {
+    const ms = randomNum ? format(time.ms).slice(0, 1) + randomNum : format(time.ms);
+    $display.textContent = `${format(time.mm)}:${format(time.ss)}:${ms}`;
+  };
+  return {
+    start() {
+      return setInterval(() => {
+        time.ms++;
 
-const start = () =>
-  setInterval(() => {
-    time.ms++;
+        if (time.ms > 99) {
+          time.ss++;
+          time.ms = 0;
+        }
 
-    if (time.ms > 99) {
-      time.ss++;
-      time.ms = 0;
-    }
+        if (time.ss > 59) {
+          time.mm++;
+          time.ss = 0;
+        }
 
-    if (time.ss > 59) {
-      time.mm++;
-      time.ss = 0;
-    }
+        timeDisplay(randomNum);
+      }, 10);
+    },
+    stop(timer) {
+      clearInterval(timer);
 
-    timeDisplay(randomNum);
-  }, 10);
-
-const stop = timer => {
-  randomNum = getRandomNum();
-  clearInterval(timer);
-
-  timeDisplay();
-};
+      timeDisplay();
+    },
+    reset() {
+      time = { mm: 0, ss: 0, ms: 0 };
+    },
+    laps(lapNum) {
+      $laps.innerHTML += `<div>${lapNum}</div><div>${format(time.mm)}:${format(time.ss)}:${format(time.ms)}</div>`;
+    },
+  };
+})();
 
 $firstControlBtn.onclick = ({ target }) => {
   let lapNum = 1;
@@ -52,13 +60,13 @@ $firstControlBtn.onclick = ({ target }) => {
       $secondControlBtn.textContent = 'Laps';
       $secondControlBtn.disabled = false;
 
-      timer = start();
+      timer = stopwatch.start();
     } else {
       target.textContent = 'Start';
 
       $secondControlBtn.textContent = 'Reset';
 
-      stop(timer);
+      stopwatch.stop(timer);
     }
   };
 
@@ -66,7 +74,7 @@ $firstControlBtn.onclick = ({ target }) => {
 
   $secondControlBtn.onclick = ({ target }) => {
     if (target.textContent === 'Reset') {
-      time = { mm: 0, ss: 0, ms: 0 };
+      stopwatch.reset();
       $display.textContent = '00:00:00';
       target.disabled = true;
       lapNum = 0;
@@ -75,13 +83,8 @@ $firstControlBtn.onclick = ({ target }) => {
 
     if (target.textContent === 'Laps') {
       if (!$laps.innerHTML) $laps.innerHTML += '<div class="lap-title">Laps</div><div class="lap-title">Time</div>';
-
-      $laps.innerHTML += `<div>${lapNum}</div><div>${format(time.mm)}:${format(time.ss)}:${format(time.ms)}</div>`;
-
+      stopwatch.laps(lapNum);
       lapNum++;
-
-      randomNum = getRandomNum();
-      timeDisplay(randomNum);
     }
   };
 };
