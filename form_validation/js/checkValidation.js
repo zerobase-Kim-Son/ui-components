@@ -17,7 +17,6 @@ const checkValid = (exp, $target) => {
   if ($target.name === 'userid') $errorMessage.textContent = !isValid ? '이메일 형식에 맞게 입력해 주세요.' : '';
   if ($target.name === 'username') $errorMessage.textContent = !isValid ? '이름을 입력해 주세요.' : '';
   if ($target.name === 'password') $errorMessage.textContent = !isValid ? '영문 또는 숫자를 6 ~ 12자 입력하세요.' : '';
-  if ($target.name === 'confirm-password') $errorMessage.textContent = !isValid ? '비밀번호가 일치하지 않습니다.' : '';
   toggleIcon($successIcon, !isValid);
 };
 
@@ -34,4 +33,12 @@ export const checkUserName = $target => {
 export const checkPassword = $target => {
   const regExp = /^[0-9a-zA-Z]{6,12}$/;
   checkValid(regExp, $target);
+};
+
+export const checkConfirmPassword = $target => {
+  const [$successIcon, $errorIcon, $errorMessage] = getIconsAndMessage($target);
+  const isValid = $target.parentNode.previousElementSibling.firstElementChild.value !== $target.value;
+  toggleIcon($errorIcon, !isValid);
+  $errorMessage.textContent = isValid ? '비밀번호가 일치하지 않습니다.' : '';
+  toggleIcon($successIcon, isValid);
 };
