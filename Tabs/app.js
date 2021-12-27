@@ -25,34 +25,42 @@ const fetchTabsData = () => {
   });
 };
 
-fetchTabsData()
-  .then(menus => {
-    $spinner.style.display = 'none';
+const createTabs = menus =>
+  menus.map((menu, index) => `<div class="tab" data-index=${index}>${menu.title}</div>`).join('');
 
-    const tabs = menus.map((menu, index) => `<div class="tab" data-index=${index}>${menu.title}</div>`).join('');
-    const tabContent = menus
-      .map((menu, index) => `<div class="tab-content ${index === 0 ? 'active' : ''}">${menu.content}</div>`)
-      .join('');
+const createTabContents = menus =>
+  menus.map((menu, index) => `<div class="tab-content ${index === 0 ? 'active' : ''}">${menu.content}</div>`).join('');
 
-    $tabs.style.setProperty('--tabs-length', menus.length);
-    $tabs.innerHTML = `
+const render = (tabs, tabContents) => {
+  $tabs.innerHTML = `
     <nav>
       ${tabs}
       <span class="glider"></span>
     </nav>
-    ${tabContent}`;
+    ${tabContents}`;
+};
+
+fetchTabsData()
+  .then(menus => {
+    $spinner.style.display = 'none';
+
+    const tabs = createTabs(menus);
+    const tabContents = createTabContents(menus);
+
+    $tabs.style.setProperty('--tabs-length', menus.length);
+
+    render(tabs, tabContents);
   })
   .catch(err => console.error(err));
 
 $tabs.onclick = ({ target }) => {
   if (!target.classList.contains('tab')) return;
 
-  const contents = [...$tabs.children].filter(content => content.classList.contains('tab-content'));
-
+  const tabContents = [...$tabs.children].filter(content => content.classList.contains('tab-content'));
   const dataIndex = target.getAttribute('data-index');
 
-  contents.forEach((content, index) => {
-    content.classList.toggle('active', index === +dataIndex);
+  tabContents.forEach((tabContent, index) => {
+    tabContent.classList.toggle('active', index === +dataIndex);
   });
 
   target.parentNode.lastElementChild.style.left =
